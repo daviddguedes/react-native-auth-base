@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { DeviceEventEmitter, AsyncStorage } from 'react-native';
+import { DeviceEventEmitter, AsyncStorage, StyleSheet } from 'react-native';
 import Loader from './../../loader';
 
 import {
@@ -9,7 +9,11 @@ import {
    Form,
    Item as FormItem,
    Input,
-   Label
+   Label,
+   List,
+   ListItem,
+   InputGroup,
+   Icon
 } from 'native-base';
 
 export default class Login extends Component {
@@ -63,8 +67,12 @@ export default class Login extends Component {
 
    render() {
       return (
-         <Container>
-            <Form>
+         <Container style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: 20}}>
+            {/* <Form>
                <FormItem floatingLabel>
                   <Label>Email or Username</Label>
                   <Input autoCapitalize='none' onChangeText={(username) => this.setState({ username })} />
@@ -80,7 +88,41 @@ export default class Login extends Component {
                <Button full light onPress={() => this.signUp()}><Text> Sign Up </Text></Button>
             </Form>
             {this.state.error && <Text>{JSON.stringify(this.state.error.message)}</Text>}
+            <Loader loading={this.state.loading} /> */}
+
+
+            <List>
+               <ListItem>
+                  <InputGroup>
+                     <Icon name="ios-person" style={{ color: '#0A69FE' }} />
+                     <Input
+                        autoCapitalize='none'
+                        onChangeText={(username) => this.setState({ username})}
+                        value={this.state.email}
+                        placeholder={"Email or Username"} />
+                  </InputGroup>
+               </ListItem>
+               <ListItem>
+                  <InputGroup>
+                     <Icon name="ios-unlock" style={{ color: '#0A69FE' }} />
+                     <Input
+                        onChangeText={(password) => this.setState({ password })}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        placeholder={"Password"} />
+                  </InputGroup>
+               </ListItem>
+            </List>
+            <Button full primary onPress={() => { this.doLogin()}}>
+               <Text>Login</Text>
+              </Button>
+            <Button full onPress={() => { this.signUp()}} light>
+               <Text>Sign Up</Text>
+              </Button>
+
+            {this.state.error && <Text>{JSON.stringify(this.state.error.message)}</Text>}
             <Loader loading={this.state.loading} />
+
          </Container>
       );
    }

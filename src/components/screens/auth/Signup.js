@@ -3,15 +3,16 @@ import Loader from './../../loader';
 
 import {
    Container,
-   Header,
    Button,
    Text,
-   Body,
    Form,
    Item as FormItem,
    Input,
    Label,
-   Title
+   List,
+   ListItem,
+   InputGroup,
+   Icon
 } from 'native-base';
 
 export default class Signup extends Component {
@@ -44,39 +45,67 @@ export default class Signup extends Component {
                this.setState({ loading: false });
                this.props.navigation.push('Login');
             },
-            error: function (user, error) {
+            error: (user, error) => {
                this.setState({ loading: false });
                this.setState({
                   error: error.message
                });
             }
          });
-      } 
+      } else {
+         this.setState({
+            error: { message: "Né assim não, oxe..." }
+         });
+      }
    }
 
    render() {
       return (
-         <Container>
-            <Form>
-               <FormItem floatingLabel>
-                  <Label>Username</Label>
-                  <Input autoCapitalize='none' onChangeText={(username) => this.setState({ username })} />
-               </FormItem>
-               <FormItem floatingLabel>
-                  <Label>Email</Label>
-                  <Input autoCapitalize='none' onChangeText={(email) => this.setState({email})} />
-               </FormItem>
-               <FormItem floatingLabel last>
-                  <Label>Password</Label>
-                  <Input secureTextEntry={true} onChangeText={(password) => this.setState({ password })}  />
-               </FormItem>
+         <Container style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: 20
+         }}>
+            <List>
+               <ListItem>
+                  <InputGroup>
+                     <Icon name="mail" style={{ color: '#0A69FE' }} />
+                     <Input
+                        autoCapitalize='none'
+                        onChangeText={(email) => this.setState({ email })}
+                        value={this.state.email}
+                        placeholder={"Email"} />
+                  </InputGroup>
+               </ListItem>
+               <ListItem>
+                  <InputGroup>
+                     <Icon name="ios-person" style={{ color: '#0A69FE' }} />
+                     <Input
+                        autoCapitalize='none'
+                        onChangeText={(username) => this.setState({ username })}
+                        value={this.state.username}
+                        placeholder={"Username"} />
+                  </InputGroup>
+               </ListItem>
+               <ListItem>
+                  <InputGroup>
+                     <Icon name="ios-unlock" style={{ color: '#0A69FE' }} />
+                     <Input
+                        onChangeText={(password) => this.setState({ password })}
+                        value={this.state.password}
+                        secureTextEntry={true}
+                        placeholder={"Password"} />
+                  </InputGroup>
+               </ListItem>
+            </List>
+            <Button full primary onPress={() => { this.doSignIn() }}>
+               <Text>Sign In</Text>
+            </Button>
 
-               <Button full primary onPress={() => this.doSignIn()} style={{ paddingBottom: 4 }}>
-                  <Text> Sign In </Text>
-               </Button>
-            </Form>
-            {this.state.error && <Text>{JSON.stringify(this.state.error.message)}</Text>}
+            {this.state.error && <Text>{ JSON.stringify(this.state.error) }</Text>}
             <Loader loading={this.state.loading} />
+
          </Container>
       );
    }
